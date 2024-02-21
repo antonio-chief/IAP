@@ -1,37 +1,38 @@
-// Query the submit button and input task field
-var submit = document.querySelector('input[type="submit"]');
-var newTask = document.querySelector('input[name="task"]');
+    document.addEventListener("DOMContentLoaded", function() {
+      // Query for the submit button and input task field
+      const submit = document.getElementById("submitButton");
+      const newTask = document.getElementById("newTaskInput");
 
-// Check if the submit button and input task field exist
-if (submit && newTask) {
-  // Listen for input to be typed into the input field
-  newTask.addEventListener('input', function() {
-    // Store the current value of the input field
-    var currentTask = newTask.value;
-    // Log the current task value to the console
-    console.log('Current task:', currentTask);
-  });
+      // Disable the submit button by default
+      submit.disabled = true;
 
-  // Listen for submission of the form
-  submit.addEventListener('click', function(event) {
-    // Prevent the default form submission behavior
-    event.preventDefault();
-    // Store the current value of the input field
-    var submittedTask = newTask.value;
-    // Log the submitted task value to the console
-    console.log('Submitted task:', submittedTask);
+      // Listen for input to be typed into the input field
+      newTask.addEventListener("input", function() {
+        // Enable the submit button if there is text in the input field
+        submit.disabled = newTask.value.trim() === "";
+      });
 
-    // Find the task the user just submitted
-    var taskList = document.querySelector('ul');
-    // Create a list item for the new task
-    var newListItem = document.createElement('li');
-    newListItem.textContent = submittedTask;
-    // Add the new task to the unordered list
-    taskList.appendChild(newListItem);
+      // Listen for submission of form
+      document.getElementById("taskForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent form submission
 
-    // Clear the input field after submission
-    newTask.value = '';
-  });
-} else {
-  console.log('Submit button or input task field not found.');
-}
+        // Find the task the user just submitted
+        const taskText = newTask.value.trim();
+        if (taskText !== "") {
+          // Create a list item for the new task
+          const newTaskItem = document.createElement("li");
+          newTaskItem.textContent = taskText;
+
+          // Add the task to the unordered list
+          const taskList = document.getElementById("taskList");
+          taskList.appendChild(newTaskItem);
+
+          // Clear the input field and disable the submit button again
+          newTask.value = "";
+          submit.disabled = true;
+        }
+      });
+
+      // Prevent default form submission
+      return false;
+    });
